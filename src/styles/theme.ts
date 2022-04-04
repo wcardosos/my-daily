@@ -1,8 +1,8 @@
 import { extendTheme } from '@chakra-ui/react';
 
 const fonts = {
-  body: 'sans-serif',
-  heading: 'sans-serif',
+  body: 'Josefin Sans, sans-serif',
+  heading: 'Josefin Sans, sans-serif',
 };
 
 const styles = {
