@@ -14,7 +14,7 @@ interface IActionBarProps {
 
 export default function ActionBar({ handleLogout }: IActionBarProps) {
   return (
-    <HStack spacing="2">
+    <HStack data-testid="action-bar" spacing="2">
       <Button data-testid="settings-button" variant="ghost">
         <SettingsIcon fontSize="24" />
       </Button>
