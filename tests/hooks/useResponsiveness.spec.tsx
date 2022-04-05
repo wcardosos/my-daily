@@ -28,4 +28,21 @@ describe('Hook: useResponsiveness', () => {
     expect(useBreakpointValueMock).toHaveBeenCalledWith(expectedBreakpoint);
     expect(result).toBe('test');
   });
+
+  it('Should return if the screen is a mobile version', () => {
+    const expectedBreakpoint = {
+      base: true,
+      lg: false,
+    };
+
+    const useBreakpointValueMock = useBreakpointValue as jest
+      .MockedFunction<typeof useBreakpointValue>;
+
+    useBreakpointValueMock.mockImplementation(() => 'test');
+
+    const result = useResponsiveness('mobile');
+
+    expect(useBreakpointValueMock).toHaveBeenCalledWith(expectedBreakpoint);
+    expect(result).toBe('test');
+  });
 });
