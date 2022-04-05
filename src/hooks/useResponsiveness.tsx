@@ -1,6 +1,6 @@
 import { useBreakpointValue } from '@chakra-ui/react';
 
-const WIDE_VERSIONS = ['desktop'];
+const WIDE_VERSIONS = ['desktop', 'mobile'];
 
 export const useResponsiveness = (wideVersion: string): boolean => {
   if (!WIDE_VERSIONS.includes(wideVersion)) {
@@ -11,6 +11,10 @@ export const useResponsiveness = (wideVersion: string): boolean => {
     desktop: {
       base: false,
       lg: true,
+    },
+    mobile: {
+      base: true,
+      lg: false,
     },
   };
 
