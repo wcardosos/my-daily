@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Center,
@@ -9,13 +9,36 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import WorkCard from './WorkCard';
+import { ITask } from '../contexts/DailyWorkContext';
 
 interface IWorkEventsHandler {
   title: string
-  tasks: Array<string>
+  tasks: ITask[]
+  add: (value: unknown) => void // eslint-disable-line no-unused-vars
+  remove: (value: unknown) => void // eslint-disable-line no-unused-vars
 }
 
-export default function WorkEventsHandler({ title, tasks }: IWorkEventsHandler) {
+export default function WorkEventsHandler({
+  title,
+  tasks,
+  add,
+  remove,
+}: IWorkEventsHandler) {
+  const [inputValue, setInputValue] = useState('');
+
+  const addWork = () => {
+    add(inputValue);
+    setInputValue('');
+  };
+
+  const removeWork = (task: ITask) => {
+    remove(task);
+  };
+
+  const onChangeInput = (event: React.FormEvent<HTMLInputElement>) => {
+    setInputValue(event.currentTarget.value);
+  };
+
   return (
     <WorkCard>
       <Text as="strong" color="purple.700">{title}</Text>
@@ -24,7 +47,14 @@ export default function WorkEventsHandler({ title, tasks }: IWorkEventsHandler) 
           <Flex w="100%">
             <Text>{task}</Text>
             <Spacer />
-            <Text cursor="pointer" fontSize="xs" color="red.500">Remover</Text>
+            <Text
+              cursor="pointer"
+              fontSize="xs"
+              color="red.500"
+              onClick={() => removeWork(task)}
+            >
+              Remover
+            </Text>
           </Flex>
         )) }
       </VStack>
@@ -35,9 +65,19 @@ export default function WorkEventsHandler({ title, tasks }: IWorkEventsHandler) 
           borderColor="gray.400"
           size="sm"
           focusBorderColor="purple.500"
+          value={inputValue}
+          onChange={onChangeInput}
         />
         <Center mt="4">
-          <Button fontSize="12px" size="sm" colorScheme="purple" bgColor="purple.700">Adicionar</Button>
+          <Button
+            fontSize="12px"
+            size="sm"
+            colorScheme="purple"
+            bgColor="purple.700"
+            onClick={addWork}
+          >
+            Adicionar
+          </Button>
         </Center>
       </>
     </WorkCard>
