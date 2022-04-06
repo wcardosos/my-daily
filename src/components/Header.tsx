@@ -9,6 +9,7 @@ import Logo from './Logo';
 import Profile from './Profile';
 import ActionBar from './ActionBar';
 import { useResponsiveness } from '../hooks/useResponsiveness';
+import Drawer from './Drawer';
 
 export default function Header() {
   const isDesktopVersion = useResponsiveness('desktop');
@@ -35,6 +36,7 @@ export default function Header() {
             <ActionBar handleLogout={handleLogout} />
           </>
         )}
+        { !isDesktopVersion && <Drawer /> }
       </Flex>
     </Flex>
   );
