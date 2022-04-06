@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Box,
   Heading,
@@ -15,8 +15,57 @@ import {
 import Page from '../components/Page';
 import TabTitle from '../components/TabTitle';
 import WorkEventsHandler from '../components/WorkEventsHandler';
+import {
+  DailyWorkContext,
+  ITask,
+} from '../contexts/DailyWorkContext';
 
 export default function Daily() {
+  const {
+    whatWasDone,
+    whatWantToDo,
+    locks,
+  } = useContext(DailyWorkContext);
+
+  const addDoneTask = (task: string) => {
+    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
+      const newDoneTasks = [...whatWasDone.tasks, task];
+
+      whatWasDone.set(newDoneTasks);
+    }
+  };
+  const removeDoneTask = (task: ITask) => {
+    const newDoneTasks = whatWasDone.tasks.filter((t) => t !== task);
+
+    whatWasDone.set(newDoneTasks);
+  };
+
+  const addWantToDoTask = (task: string) => {
+    if (task) {
+      const newWantToDoTasks = [...whatWantToDo.tasks, task];
+
+      whatWantToDo.set(newWantToDoTasks);
+    }
+  };
+  const removeWantToDoTask = (task: ITask) => {
+    const newWantToDoTasks = whatWantToDo.tasks.filter((t) => t !== task);
+
+    whatWantToDo.set(newWantToDoTasks);
+  };
+
+  const addLockTask = (task: string) => {
+    if (task) {
+      const newLockTasks = [...locks.tasks, task];
+
+      locks.set(newLockTasks);
+    }
+  };
+  const removeLockTask = (task: ITask) => {
+    const newLockTasks = locks.tasks.filter((t) => t !== task);
+
+    locks.set(newLockTasks);
+  };
+
   return (
     <Page>
       <Box>
@@ -28,9 +77,24 @@ export default function Daily() {
           <TabPanels>
             <TabPanel>
               <VStack align="flex-start" spacing="8">
-                <WorkEventsHandler title="O que foi feito" tasks={['Tarefa 1', 'Tarefa 2', 'Tarefa 3']} />
-                <WorkEventsHandler title="O que se pretende fazer" tasks={['Tarefa 1', 'Tarefa 2', 'Tarefa 3']} />
-                <WorkEventsHandler title="Travas" tasks={[]} />
+                <WorkEventsHandler
+                  title="O que foi feito"
+                  tasks={whatWasDone.tasks}
+                  add={addDoneTask}
+                  remove={removeDoneTask}
+                />
+                <WorkEventsHandler
+                  title="O que se pretende fazer"
+                  tasks={whatWantToDo.tasks}
+                  add={addWantToDoTask}
+                  remove={removeWantToDoTask}
+                />
+                <WorkEventsHandler
+                  title="Travas"
+                  tasks={locks.tasks}
+                  add={addLockTask}
+                  remove={removeLockTask}
+                />
               </VStack>
             </TabPanel>
             <TabPanel>
