@@ -13,7 +13,7 @@ export default function WorkCard({ children }: IWorkCard) {
       direction="column"
       w={['100%', '400px']}
       minH="320px"
-      p="8"
+      p={['4', '8']}
       bgColor="gray.100"
       borderRadius={['5px', '10px']}
     >
