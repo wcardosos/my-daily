@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import {
   Box,
-  Heading,
   Tabs,
   TabList,
   TabPanels,
@@ -13,6 +12,8 @@ import {
   RiTodoFill as ResumeIcon,
 } from 'react-icons/ri';
 import Page from '../components/Page';
+import ResumeCard from '../components/ResumeCard';
+import ResumeEvent from '../components/ResumeEvent';
 import TabTitle from '../components/TabTitle';
 import WorkEventsHandler from '../components/WorkEventsHandler';
 import {
@@ -68,7 +69,7 @@ export default function Daily() {
 
   return (
     <Page>
-      <Box>
+      <Box w="100%">
         <Tabs variant="unstyled">
           <TabList>
             <TabTitle icon={<TasksIcon />} title="Tarefas" />
@@ -98,7 +99,11 @@ export default function Daily() {
               </VStack>
             </TabPanel>
             <TabPanel>
-              <Heading>Resumo das tarefas</Heading>
+              <ResumeCard>
+                <ResumeEvent title="O que foi feito" tasks={whatWasDone.tasks} />
+                <ResumeEvent title="O que se pretende fazer" tasks={whatWantToDo.tasks} />
+                <ResumeEvent title="Travas" tasks={locks.tasks} />
+              </ResumeCard>
             </TabPanel>
           </TabPanels>
         </Tabs>

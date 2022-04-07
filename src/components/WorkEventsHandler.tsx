@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Box,
   Button,
   Center,
   Flex,
@@ -11,7 +12,7 @@ import {
 import WorkCard from './WorkCard';
 import { ITask } from '../contexts/DailyWorkContext';
 
-interface IWorkEventsHandler {
+interface IWorkEventsHandlerProps {
   title: string
   tasks: ITask[]
   add: (value: unknown) => void // eslint-disable-line no-unused-vars
@@ -23,7 +24,7 @@ export default function WorkEventsHandler({
   tasks,
   add,
   remove,
-}: IWorkEventsHandler) {
+}: IWorkEventsHandlerProps) {
   const [inputValue, setInputValue] = useState('');
 
   const addWork = () => {
@@ -45,7 +46,9 @@ export default function WorkEventsHandler({
       <VStack spacing="4" pt="6" pb="8">
         { tasks.map((task) => (
           <Flex key={task as unknown as string} w="100%">
-            <Text>{task}</Text>
+            <Box maxW="75%">
+              <Text>{task}</Text>
+            </Box>
             <Spacer />
             <Text
               cursor="pointer"
