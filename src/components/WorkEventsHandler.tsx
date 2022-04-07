@@ -61,6 +61,7 @@ export default function WorkEventsHandler({
       <Spacer />
       <>
         <Input
+          placeholder="Adicione uma nova tarefa"
           bgColor="gray.50"
           borderColor="gray.400"
           size="sm"
