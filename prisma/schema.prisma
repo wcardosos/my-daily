@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email         String @id @unique
+  provider      AccountProvider @default(email)
+  name          String
+  password      String?
+  picture_url   String?
+  created_at    DateTime @default(now())
+
+  dailies       Daily[]
+  @@map("users")
+}
+
+model Daily {
+  id            DateTime @id @default(now())
+  user_id       String
+  tasks         Task[]
+  created_at    DateTime @default(now())
+
+  user          User @relation(fields: [user_id], references: [email])
+  @@map("dailies")
+}
+
+model Task {
+  id            String @id @default(uuid())
+  daily_id      DateTime
+  name          String
+  type          TaskType
+  created_at    DateTime @default(now())
+  
+  daily         Daily @relation(fields: [daily_id], references: [id])
+  @@map("tasks")
+}
+
+enum AccountProvider {
+  email
+  github
+  google
+}
+
+enum TaskType {
+  done
+  to_do
+  lock
+}
