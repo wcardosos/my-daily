@@ -11,6 +11,7 @@ import {
   RiTaskFill as TasksIcon,
   RiTodoFill as ResumeIcon,
 } from 'react-icons/ri';
+import axios from 'axios';
 import Page from '../components/Page';
 import ResumeCard from '../components/ResumeCard';
 import ResumeEvent from '../components/ResumeEvent';
@@ -26,13 +27,16 @@ export default function Daily() {
     whatWasDone,
     whatWantToDo,
     locks,
+    setShouldUpdateValues,
   } = useContext(DailyWorkContext);
 
-  const addDoneTask = (task: string) => {
+  const addDoneTask = async (task: string) => {
     if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      const newDoneTasks = [...whatWasDone.tasks, task];
-
-      whatWasDone.set(newDoneTasks);
+      await axios.post('/api/tasks?dailyId=11/4/2022', {
+        name: task,
+        type: 'done',
+      });
+      setShouldUpdateValues(true);
     }
   };
   const removeDoneTask = (task: ITask) => {
@@ -41,11 +45,13 @@ export default function Daily() {
     whatWasDone.set(newDoneTasks);
   };
 
-  const addWantToDoTask = (task: string) => {
-    if (task) {
-      const newWantToDoTasks = [...whatWantToDo.tasks, task];
-
-      whatWantToDo.set(newWantToDoTasks);
+  const addWantToDoTask = async (task: string) => {
+    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
+      await axios.post('/api/tasks?dailyId=11/4/2022', {
+        name: task,
+        type: 'to_do',
+      });
+      setShouldUpdateValues(true);
     }
   };
   const removeWantToDoTask = (task: ITask) => {
@@ -54,11 +60,13 @@ export default function Daily() {
     whatWantToDo.set(newWantToDoTasks);
   };
 
-  const addLockTask = (task: string) => {
-    if (task) {
-      const newLockTasks = [...locks.tasks, task];
-
-      locks.set(newLockTasks);
+  const addLockTask = async(task: string) => {
+    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
+      await axios.post('/api/tasks?dailyId=11/4/2022', {
+        name: task,
+        type: 'lock',
+      });
+      setShouldUpdateValues(true);
     }
   };
   const removeLockTask = (task: ITask) => {
