@@ -6,7 +6,15 @@ import '@testing-library/jest-dom/extend-expect';
 
 describe('Component: ResumeEvent', () => {
   const titleMock = 'resume event title';
-  const tasksMock = ['task 1', 'task 2'] as unknown as ITask[];
+  const tasksMock = [
+    {
+      id: 'id 1',
+      name: 'task 1',
+    },
+    {
+      id: 'id 2',
+      name: 'task 2',
+    }] as unknown as ITask[];
 
   it('Should render the title and the tasks', () => {
     render(<ResumeEvent title={titleMock} tasks={tasksMock} />);
