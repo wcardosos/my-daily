@@ -9,7 +9,15 @@ describe('Component: WorkEventsHandler', () => {
   const user = userEvent.setup();
   const addWorkMock = jest.fn();
   const removeWorkMock = jest.fn();
-  const tasksMock = ['test task 1', 'test task 2'];
+  const tasksMock = [
+    {
+      id: 'id 1',
+      name: 'test task 1',
+    },
+    {
+      id: 'id 2',
+      name: 'test task 2',
+    }];
 
   beforeEach(() => {
     render((

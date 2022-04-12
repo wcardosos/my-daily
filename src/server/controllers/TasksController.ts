@@ -34,4 +34,19 @@ export class TasksController {
 
     return response.status(201).end();
   }
+
+  public static async delete(
+    request: NextApiRequest,
+    response: NextApiResponse,
+  ): Promise<NextApiResponse> {
+    const { id } = request.query;
+
+    const prismaClient = new PrismaClient();
+
+    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+
+    await tasksRepository.delete(id as string);
+
+    return response.status(202).end();
+  }
 }

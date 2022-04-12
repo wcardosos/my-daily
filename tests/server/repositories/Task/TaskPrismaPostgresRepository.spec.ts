@@ -6,8 +6,11 @@ describe('Repository: TaskPrismaPostgres', () => {
   const prismaClientMock = {} as jest.MockedObject<PrismaClient>;
   const taskPrismaMock = {
     create: jest.fn(),
+    delete: jest.fn(),
     findMany: jest.fn(),
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prismaClientMock.task = taskPrismaMock as any;
 
   const taskPrismaPostgresRepository = new TaskPrismaPostgresRepository(prismaClientMock);
@@ -35,6 +38,18 @@ describe('Repository: TaskPrismaPostgres', () => {
           daily_id: 'daily id',
           name: 'name',
           type: 'done',
+        },
+      });
+    });
+  });
+
+  describe('delete', () => {
+    it('Should delete a task', async() => {
+      await taskPrismaPostgresRepository.delete('task id');
+
+      expect(taskPrismaMock.delete).toHaveBeenCalledWith({
+        where: {
+          id: 'task id',
         },
       });
     });

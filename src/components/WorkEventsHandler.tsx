@@ -45,9 +45,9 @@ export default function WorkEventsHandler({
       <Text as="strong" color="purple.700">{title}</Text>
       <VStack spacing="4" pt="6" pb="8">
         { tasks.map((task) => (
-          <Flex key={task as unknown as string} w="100%">
+          <Flex key={task.id} w="100%">
             <Box maxW="75%">
-              <Text>{task}</Text>
+              <Text>{task.name}</Text>
             </Box>
             <Spacer />
             <Text

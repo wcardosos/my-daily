@@ -15,6 +15,7 @@ interface IDailyWorkProviderProps {
 }
 
 export interface ITask {
+  id: string
   name: string
 }
 
@@ -48,9 +49,9 @@ export function DailyWorkProvider({ children }: IDailyWorkProviderProps) {
           const toDoList = data.filter((item) => item.type === 'to_do');
           const locksList = data.filter((item) => item.type === 'lock');
 
-          setWhatWasDoneTasks(doneList.map((item) => item.name));
-          setWhatWantToDoTasks(toDoList.map((item) => item.name));
-          setLocksTasks(locksList.map((item) => item.name));
+          setWhatWasDoneTasks(doneList.map(({ id, name }) => ({ id, name })));
+          setWhatWantToDoTasks(toDoList.map(({ id, name }) => ({ id, name })));
+          setLocksTasks(locksList.map(({ id, name }) => ({ id, name })));
         });
     }
 
@@ -67,9 +68,9 @@ export function DailyWorkProvider({ children }: IDailyWorkProviderProps) {
           const toDoList = data.filter((item) => item.type === 'to_do');
           const locksList = data.filter((item) => item.type === 'lock');
 
-          setWhatWasDoneTasks(doneList.map((item) => item.name));
-          setWhatWantToDoTasks(toDoList.map((item) => item.name));
-          setLocksTasks(locksList.map((item) => item.name));
+          setWhatWasDoneTasks(doneList.map(({ id, name }) => ({ id, name })));
+          setWhatWantToDoTasks(toDoList.map(({ id, name }) => ({ id, name })));
+          setLocksTasks(locksList.map(({ id, name }) => ({ id, name })));
         });
 
       setShouldUpdateValues(false);
