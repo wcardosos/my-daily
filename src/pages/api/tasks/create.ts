@@ -5,8 +5,8 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ): Promise<NextApiResponse | void> {
-  if (request.method === 'GET') {
-    return TasksController.getByDaily(request, response);
+  if (request.method === 'POST') {
+    return TasksController.create(request, response);
   }
 
   return response.status(405).end();
