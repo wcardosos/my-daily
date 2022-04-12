@@ -10,11 +10,22 @@ jest.mock('../../../src/server/repositories/Task/TaskPrismaPostgresRepository');
 describe('Controller: Tasks', () => {
   const requestMock = {} as NextApiRequest;
   const responseMock = {} as NextApiResponse;
+  const endRequestMock = jest.fn();
+  const statusMock = jest.fn().mockReturnValue({
+    end: endRequestMock,
+  });
 
   requestMock.query = { dailyId: 'daily id' };
 
+  responseMock.status = statusMock;
+
   const getByDailySpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'getByDaily');
   const saveSpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'save');
+  const deleteSpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'delete');
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe('getByDaily', () => {
     const responseJsonSpy = jest.fn();
@@ -33,20 +44,23 @@ describe('Controller: Tasks', () => {
 
   describe('create', () => {
     requestMock.body = { name: 'name', type: 'done' };
-    const endRequestMock = jest.fn();
-    const statusMock = jest.fn().mockReturnValue({
-      end: endRequestMock,
-    });
-    responseMock.status = statusMock;
 
     it('Should create a new task', async() => {
       await TasksController.create(requestMock, responseMock);
 
-      const newTaskMock = new Task('daily id', 'name', 'done');
+      const expectedNewTask = new Task('daily id', 'name', 'done');
 
-      expect(saveSpy).toHaveBeenCalledWith(newTaskMock);
-      expect(statusMock).toHaveBeenCalled();
-      expect(endRequestMock).toHaveBeenCalled();
+      expect(saveSpy).toHaveBeenCalledWith(expectedNewTask);
+    });
+  });
+
+  describe('delete', () => {
+    requestMock.query.id = 'task id';
+
+    it('Should delete a task', async() => {
+      await TasksController.delete(requestMock, responseMock);
+
+      expect(deleteSpy).toHaveBeenCalledWith('task id');
     });
   });
 });

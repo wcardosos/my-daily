@@ -32,17 +32,16 @@ export default function Daily() {
 
   const addDoneTask = async (task: string) => {
     if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks?dailyId=11/4/2022', {
+      await axios.post('/api/tasks/create?dailyId=11/4/2022', {
         name: task,
         type: 'done',
       });
       setShouldUpdateValues(true);
     }
   };
-  const removeDoneTask = (task: ITask) => {
-    const newDoneTasks = whatWasDone.tasks.filter((t) => t !== task);
-
-    whatWasDone.set(newDoneTasks);
+  const removeDoneTask = async(task: ITask) => {
+    await axios.delete(`/api/tasks/remove/${task.id}`);
+    setShouldUpdateValues(true);
   };
 
   const addWantToDoTask = async (task: string) => {
@@ -54,10 +53,9 @@ export default function Daily() {
       setShouldUpdateValues(true);
     }
   };
-  const removeWantToDoTask = (task: ITask) => {
-    const newWantToDoTasks = whatWantToDo.tasks.filter((t) => t !== task);
-
-    whatWantToDo.set(newWantToDoTasks);
+  const removeWantToDoTask = async(task: ITask) => {
+    await axios.delete(`/api/tasks/remove/${task.id}`);
+    setShouldUpdateValues(true);
   };
 
   const addLockTask = async(task: string) => {
@@ -69,10 +67,9 @@ export default function Daily() {
       setShouldUpdateValues(true);
     }
   };
-  const removeLockTask = (task: ITask) => {
-    const newLockTasks = locks.tasks.filter((t) => t !== task);
-
-    locks.set(newLockTasks);
+  const removeLockTask = async(task: ITask) => {
+    await axios.delete(`/api/tasks/remove/${task.id}`);
+    setShouldUpdateValues(true);
   };
 
   return (

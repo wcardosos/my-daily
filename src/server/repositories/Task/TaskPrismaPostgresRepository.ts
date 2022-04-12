@@ -36,4 +36,12 @@ export class TaskPrismaPostgresRepository {
       },
     });
   }
+
+  public async delete(id: string): Promise<void> {
+    await this.client.task.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
