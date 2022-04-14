@@ -10,4 +10,8 @@ export class DateHandler {
 
     return DateHandler.formatDate(todayDate);
   }
+
+  public static getFormatted(date: Date): string {
+    return this.formatDate(date);
+  }
 }
