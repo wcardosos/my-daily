@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Task } from '../entities/Task';
+import { DateHandler } from '../providers/DateHandler';
 import { DailyPrismaPostgresRepository } from '../repositories/Daily/DailyPrismaPostgresRepository';
 import { TaskPrismaPostgresRepository } from '../repositories/Task/TaskPrismaPostgresRepository';
 
@@ -9,7 +10,12 @@ export class TasksController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<void> {
-    const { dailyId } = request.query;
+    const { dateToSearch } = request.query;
+
+    const date = new Date(dateToSearch as string);
+
+    const dailyId = DateHandler.getFormatted(date);
+
     const prismaClient = new PrismaClient();
 
     const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);

@@ -15,7 +15,7 @@ export default function Page({ children }: IPageProps) {
   return (
     <Flex direction="column">
       <Header />
-      <Flex pt="8" px={isMobileVersion ? '6' : 0} w="100%" maxWidth={1480} mx="auto">
+      <Flex py="8" px={isMobileVersion ? '6' : 0} w="100%" maxWidth={1480} mx="auto">
         {!isMobileVersion && <Sidebar />}
         {children}
       </Flex>
