@@ -41,9 +41,8 @@ export function DailyWorkProvider({ children }: IDailyWorkProviderProps) {
 
   useLayoutEffect(() => {
     async function fetchDailyData() {
-      const date = '11/4/2022';
       await axios
-        .get(`/api/tasks?dailyId=${date}`)
+        .get('/api/tasks/today')
         .then(({ data }) => {
           const doneList = data.filter((item) => item.type === 'done');
           const toDoList = data.filter((item) => item.type === 'to_do');
@@ -60,9 +59,8 @@ export function DailyWorkProvider({ children }: IDailyWorkProviderProps) {
 
   useEffect(() => {
     if (shouldUpdateValues) {
-      const date = '11/4/2022';
       axios
-        .get(`/api/tasks?dailyId=${date}`)
+        .get('/api/tasks/today')
         .then(({ data }) => {
           const doneList = data.filter((item) => item.type === 'done');
           const toDoList = data.filter((item) => item.type === 'to_do');
