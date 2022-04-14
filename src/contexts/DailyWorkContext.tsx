@@ -17,6 +17,7 @@ interface IDailyWorkProviderProps {
 export interface ITask {
   id: string
   name: string
+  type: string
 }
 
 interface IWork {
