@@ -32,7 +32,7 @@ export default function Daily() {
 
   const addDoneTask = async (task: string) => {
     if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks/create?dailyId=11/4/2022', {
+      await axios.post('/api/tasks/create/today', {
         name: task,
         type: 'done',
       });
@@ -46,7 +46,7 @@ export default function Daily() {
 
   const addWantToDoTask = async (task: string) => {
     if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks?dailyId=11/4/2022', {
+      await axios.post('/api/tasks/today', {
         name: task,
         type: 'to_do',
       });
@@ -60,7 +60,7 @@ export default function Daily() {
 
   const addLockTask = async(task: string) => {
     if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks?dailyId=11/4/2022', {
+      await axios.post('/api/tasks/today', {
         name: task,
         type: 'lock',
       });
