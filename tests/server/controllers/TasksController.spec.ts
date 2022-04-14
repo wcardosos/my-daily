@@ -4,6 +4,7 @@ import { TasksController } from '../../../src/server/controllers/TasksController
 import { TaskPrismaPostgresRepository } from '../../../src/server/repositories/Task/TaskPrismaPostgresRepository';
 import { Task } from '../../../src/server/entities/Task';
 import { DailyPrismaPostgresRepository } from '../../../src/server/repositories/Daily/DailyPrismaPostgresRepository';
+import { DateHandler } from '../../../src/server/providers/DateHandler';
 
 jest.mock('@prisma/client');
 jest.mock('../../../src/server/repositories/Task/TaskPrismaPostgresRepository');
@@ -27,23 +28,34 @@ describe('Controller: Tasks', () => {
   const saveTaskRepositorySpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'save');
   const deleteTaskRepositorySpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'delete');
 
-  const getTodayDailyRepository = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'getToday');
-  const saveTodayDailyRepository = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'saveToday');
+  const getTodayDailyRepositorySpy = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'getToday');
+  const saveTodayDailyRepositorySpy = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'saveToday');
+
+  const getFormattedDateHandlerSpy = jest.spyOn(DateHandler, 'getFormatted');
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe('getByDaily', () => {
+    requestMock.query.dateToSearch = 'date';
+
     it('Should return the tasks', async() => {
       getByDailyTaskRepositorySpy.mockResolvedValue([
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
       ]);
+      getFormattedDateHandlerSpy.mockReturnValue('date formatted');
+      const dateMock = jest.fn();
+      global.Date = dateMock as unknown as typeof Date;
+
+      dateMock.mockReturnValue('new date formatted');
 
       await TasksController.getByDaily(requestMock, responseMock);
 
-      expect(getByDailyTaskRepositorySpy).toHaveBeenCalledWith('daily id');
+      expect(dateMock).toHaveBeenCalledWith('date');
+      expect(getFormattedDateHandlerSpy).toHaveBeenCalled();
+      expect(getByDailyTaskRepositorySpy).toHaveBeenCalledWith('date formatted');
       expect(responseJsonSpy).toHaveBeenCalled();
     });
   });
@@ -54,7 +66,7 @@ describe('Controller: Tasks', () => {
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
       ]);
-      getTodayDailyRepository.mockResolvedValueOnce('daily id');
+      getTodayDailyRepositorySpy.mockResolvedValueOnce('daily id');
 
       await TasksController.getToday(requestMock, responseMock);
 
@@ -67,11 +79,11 @@ describe('Controller: Tasks', () => {
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
       ]);
-      getTodayDailyRepository.mockResolvedValueOnce(null);
+      getTodayDailyRepositorySpy.mockResolvedValueOnce(null);
 
       await TasksController.getToday(requestMock, responseMock);
 
-      expect(saveTodayDailyRepository).toHaveBeenCalled();
+      expect(saveTodayDailyRepositorySpy).toHaveBeenCalled();
       expect(responseJsonSpy).toHaveBeenCalled();
     });
   });
@@ -98,7 +110,7 @@ describe('Controller: Tasks', () => {
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
       ]);
-      getTodayDailyRepository.mockResolvedValueOnce('daily id');
+      getTodayDailyRepositorySpy.mockResolvedValueOnce('daily id');
 
       await TasksController.createToday(requestMock, responseMock);
 
@@ -112,11 +124,11 @@ describe('Controller: Tasks', () => {
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
       ]);
-      getTodayDailyRepository.mockResolvedValueOnce(null);
+      getTodayDailyRepositorySpy.mockResolvedValueOnce(null);
 
       await TasksController.createToday(requestMock, responseMock);
 
-      expect(saveTodayDailyRepository).toHaveBeenCalled();
+      expect(saveTodayDailyRepositorySpy).toHaveBeenCalled();
       expect(saveTaskRepositorySpy).toHaveBeenCalled();
       expect(statusMock).toHaveBeenCalledWith(201);
       expect(endResponseMock).toHaveBeenCalled();
