@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TasksController } from '../../../../server/controllers/TasksController';
+import httpStatus from '../../../../utils/httpStatus';
 
 export default async function handler(
   request: NextApiRequest,
@@ -9,5 +10,5 @@ export default async function handler(
     return TasksController.createToday(request, response);
   }
 
-  return response.status(405).end();
+  return response.status(httpStatus.METHOD_NOT_ALLOWED).end();
 }

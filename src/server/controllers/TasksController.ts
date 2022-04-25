@@ -4,6 +4,7 @@ import { Task } from '../entities/Task';
 import { DateHandler } from '../providers/DateHandler';
 import { DailyPrismaPostgresRepository } from '../repositories/Daily/DailyPrismaPostgresRepository';
 import { TaskPrismaPostgresRepository } from '../repositories/Task/TaskPrismaPostgresRepository';
+import httpStatus from '../../utils/httpStatus';
 
 export class TasksController {
   public static async getByDaily(
@@ -59,7 +60,7 @@ export class TasksController {
 
     await tasksRepository.save(newTask);
 
-    return response.status(201).end();
+    return response.status(httpStatus.CREATED).end();
   }
 
   public static async createToday(
@@ -82,7 +83,7 @@ export class TasksController {
 
     await tasksRepository.save(newTask);
 
-    return response.status(201).end();
+    return response.status(httpStatus.CREATED).end();
   }
 
   public static async delete(
@@ -97,6 +98,6 @@ export class TasksController {
 
     await tasksRepository.delete(id as string);
 
-    return response.status(202).end();
+    return response.status(httpStatus.ACCEPTED).end();
   }
 }
