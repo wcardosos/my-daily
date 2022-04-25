@@ -66,7 +66,7 @@ export class TasksController {
   public static async createToday(
     request: NextApiRequest,
     response: NextApiResponse,
-  ): Promise<NextApiResponse> {
+  ): Promise<void> {
     const { name, type } = request.body;
     const prismaClient = new PrismaClient();
 
@@ -81,9 +81,9 @@ export class TasksController {
 
     const newTask = new Task(dailyTodayId, name, type);
 
-    await tasksRepository.save(newTask);
+    const { id } = await tasksRepository.save(newTask);
 
-    return response.status(httpStatus.CREATED).end();
+    return response.status(httpStatus.CREATED).json({ id });
   }
 
   public static async delete(
