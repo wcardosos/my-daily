@@ -24,6 +24,7 @@ describe('Component: WorkEventsHandler', () => {
       <WorkEventsHandler
         title="Work event handler test"
         tasks={tasksMock as unknown as ITask[]}
+        type="type"
         add={addWorkMock}
         remove={removeWorkMock}
       />
