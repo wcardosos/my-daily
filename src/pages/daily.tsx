@@ -30,45 +30,26 @@ export default function Daily() {
     setShouldUpdateValues,
   } = useContext(DailyWorkContext);
 
-  const addDoneTask = async (task: string) => {
-    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
+  const addTask = async (task: string, type: string) => {
+    const tasksTypes = {
+      done: whatWasDone,
+      to_do: whatWantToDo,
+      lock: locks,
+    };
+
+    const tasksList = tasksTypes[type];
+
+    if (task && !tasksList.tasks.includes(task as unknown as ITask)) {
       await axios.post('/api/tasks/create/today', {
         name: task,
-        type: 'done',
+        type,
       });
       setShouldUpdateValues(true);
     }
-  };
-  const removeDoneTask = async(task: ITask) => {
-    await axios.delete(`/api/tasks/remove/${task.id}`);
-    setShouldUpdateValues(true);
   };
 
-  const addWantToDoTask = async (task: string) => {
-    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks/today', {
-        name: task,
-        type: 'to_do',
-      });
-      setShouldUpdateValues(true);
-    }
-  };
-  const removeWantToDoTask = async(task: ITask) => {
-    await axios.delete(`/api/tasks/remove/${task.id}`);
-    setShouldUpdateValues(true);
-  };
-
-  const addLockTask = async(task: string) => {
-    if (task && !whatWasDone.tasks.includes(task as unknown as ITask)) {
-      await axios.post('/api/tasks/today', {
-        name: task,
-        type: 'lock',
-      });
-      setShouldUpdateValues(true);
-    }
-  };
-  const removeLockTask = async(task: ITask) => {
-    await axios.delete(`/api/tasks/remove/${task.id}`);
+  const removeTask = async(taskId: string) => {
+    await axios.delete(`/api/tasks/remove/${taskId}`);
     setShouldUpdateValues(true);
   };
 
@@ -86,20 +67,23 @@ export default function Daily() {
                 <WorkEventsHandler
                   title="O que foi feito"
                   tasks={whatWasDone.tasks}
-                  add={addDoneTask}
-                  remove={removeDoneTask}
+                  type="done"
+                  add={addTask}
+                  remove={removeTask}
                 />
                 <WorkEventsHandler
                   title="O que se pretende fazer"
                   tasks={whatWantToDo.tasks}
-                  add={addWantToDoTask}
-                  remove={removeWantToDoTask}
+                  type="to_do"
+                  add={addTask}
+                  remove={removeTask}
                 />
                 <WorkEventsHandler
                   title="Travas"
                   tasks={locks.tasks}
-                  add={addLockTask}
-                  remove={removeLockTask}
+                  type="lock"
+                  add={addTask}
+                  remove={removeTask}
                 />
               </VStack>
             </TabPanel>

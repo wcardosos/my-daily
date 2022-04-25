@@ -15,25 +15,27 @@ import { ITask } from '../contexts/DailyWorkContext';
 interface IWorkEventsHandlerProps {
   title: string
   tasks: ITask[]
-  add: (value: unknown) => void // eslint-disable-line no-unused-vars
+  type: string
+  add: (value: unknown, type: string) => void // eslint-disable-line no-unused-vars
   remove: (value: unknown) => void // eslint-disable-line no-unused-vars
 }
 
 export default function WorkEventsHandler({
   title,
   tasks,
+  type,
   add,
   remove,
 }: IWorkEventsHandlerProps) {
   const [inputValue, setInputValue] = useState('');
 
   const addWork = () => {
-    add(inputValue);
+    add(inputValue, type);
     setInputValue('');
   };
 
   const removeWork = (task: ITask) => {
-    remove(task);
+    remove(task.id);
   };
 
   const onChangeInput = (event: React.FormEvent<HTMLInputElement>) => {
