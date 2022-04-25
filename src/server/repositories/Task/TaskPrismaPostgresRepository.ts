@@ -21,14 +21,14 @@ export class TaskPrismaPostgresRepository {
     return tasks;
   }
 
-  public async save(task: Task): Promise<void> {
+  public async save(task: Task): Promise<TaskPrisma> {
     const {
       dailyId,
       name,
       type,
     } = task.get();
 
-    await this.client.task.create({
+    return this.client.task.create({
       data: {
         daily_id: dailyId,
         name,
