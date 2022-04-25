@@ -13,11 +13,12 @@ jest.mock('../../../src/server/repositories/Daily/DailyPrismaPostgresRepository'
 describe('Controller: Tasks', () => {
   const requestMock = {} as NextApiRequest;
   const responseMock = {} as NextApiResponse;
+  const responseJsonSpy = jest.fn();
   const endResponseMock = jest.fn();
   const statusMock = jest.fn().mockReturnValue({
     end: endResponseMock,
+    json: responseJsonSpy,
   });
-  const responseJsonSpy = jest.fn();
 
   requestMock.query = { dailyId: 'daily id' };
 
@@ -106,6 +107,13 @@ describe('Controller: Tasks', () => {
     requestMock.body = { name: 'name', type: 'done' };
 
     it('Should get today daily tasks', async() => {
+      saveTaskRepositorySpy.mockResolvedValueOnce({
+        id: 'task id',
+        daily_id: 'daily id',
+        created_at: new Date(),
+        name: 'task',
+        type: 'done',
+      });
       getByDailyTaskRepositorySpy.mockResolvedValue([
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
@@ -116,10 +124,17 @@ describe('Controller: Tasks', () => {
 
       expect(saveTaskRepositorySpy).toHaveBeenCalled();
       expect(statusMock).toHaveBeenCalledWith(201);
-      expect(endResponseMock).toHaveBeenCalled();
+      expect(responseJsonSpy).toHaveBeenCalledWith({ id: 'task id' });
     });
 
     it('Should create a daily when not exists and return today daily tasks', async() => {
+      saveTaskRepositorySpy.mockResolvedValueOnce({
+        id: 'task id',
+        daily_id: 'daily id',
+        created_at: new Date(),
+        name: 'task',
+        type: 'done',
+      });
       getByDailyTaskRepositorySpy.mockResolvedValue([
         'task 1' as unknown as TaskPrisma,
         'task 2' as unknown as TaskPrisma,
@@ -131,7 +146,7 @@ describe('Controller: Tasks', () => {
       expect(saveTodayDailyRepositorySpy).toHaveBeenCalled();
       expect(saveTaskRepositorySpy).toHaveBeenCalled();
       expect(statusMock).toHaveBeenCalledWith(201);
-      expect(endResponseMock).toHaveBeenCalled();
+      expect(responseJsonSpy).toHaveBeenCalledWith({ id: 'task id' });
     });
   });
 

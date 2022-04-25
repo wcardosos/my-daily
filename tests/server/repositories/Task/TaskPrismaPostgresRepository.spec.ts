@@ -27,11 +27,11 @@ describe('Repository: TaskPrismaPostgres', () => {
   });
 
   describe('save', () => {
-    it('Should return tasks', async() => {
-      taskPrismaMock.create.mockResolvedValue(['task 1', 'task 2']);
+    it('Should save tasks', async() => {
+      taskPrismaMock.create.mockResolvedValue('task');
       const taskMock = new Task('daily id', 'name', 'done');
 
-      await taskPrismaPostgresRepository.save(taskMock);
+      const result = await taskPrismaPostgresRepository.save(taskMock);
 
       expect(taskPrismaMock.create).toHaveBeenCalledWith({
         data: {
@@ -40,6 +40,7 @@ describe('Repository: TaskPrismaPostgres', () => {
           type: 'done',
         },
       });
+      expect(result).toBe('task');
     });
   });
 
