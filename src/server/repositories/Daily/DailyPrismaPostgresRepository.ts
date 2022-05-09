@@ -27,13 +27,13 @@ export class DailyPrismaPostgresRepository {
     return daily.id;
   }
 
-  public async saveToday(): Promise<string> {
+  public async saveToday(user: string): Promise<string> {
     const newDailyId = DateHandler.getToday();
 
     await this.client.daily.create({
       data: {
         id: newDailyId,
-        user_id: 'wagner@test.com',
+        user_id: user,
       },
     });
 

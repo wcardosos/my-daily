@@ -36,4 +36,14 @@ describe('Repository: DailyPrismaPostgres', () => {
       expect(result).toBeNull();
     });
   });
+
+  describe('saveToday', () => {
+    getTodayDateHandlerSpy.mockReturnValue('id');
+
+    it('Should create the today daily', async() => {
+      await dailyPrismaPostgresRepository.saveToday('user');
+
+      expect(dailyPrismaMock.create).toHaveBeenCalledWith({ data: expect.objectContaining({ user_id: 'user' }) });
+    });
+  });
 });
