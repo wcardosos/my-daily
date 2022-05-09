@@ -7,11 +7,17 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { getSession, signIn } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
 import { FaGithub } from 'react-icons/fa';
-import Logo from '../components/Logo';
-import AuthSectionInfo from '../components/AuthSectionInfo';
+import Logo from '../../components/Logo';
+import AuthSectionInfo from '../../components/AuthSectionInfo';
 
 export default function Login() {
+  const handleLogin = async() => {
+    signIn('github', { callbackUrl: '/login/processing' });
+  };
+
   return (
     <Box w="100%">
       <Stack
@@ -39,6 +45,7 @@ export default function Login() {
               fontWeight={400}
               h="48px"
               rightIcon={<FaGithub fontSize={24} />}
+              onClick={handleLogin}
               _hover={{
                 bgColor: 'gray.700',
               }}
@@ -52,3 +59,19 @@ export default function Login() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async({ req }) => {
+  const session = await getSession({ req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/daily',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
