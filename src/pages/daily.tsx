@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession, useSession } from 'next-auth/react';
 import {
   Box,
   Center,
@@ -28,6 +30,7 @@ export default function Daily() {
   const [whatWasDone, setWhatWasDone] = useState<Array<ITask>>([]);
   const [whatWantToDo, setWhatWantToDo] = useState<Array<ITask>>([]);
   const [locks, setLocks] = useState<Array<ITask>>([]);
+  const user = useSession();
 
   const { isLoading } = useQuery('getDailyTasks', async() => {
     const response = await axios.get('/api/tasks/today');
@@ -56,6 +59,7 @@ export default function Daily() {
 
     if (task && !tasksList.includes(task as unknown as ITask)) {
       await axios.post('/api/tasks/create/today', {
+        user: user.data.email,
         name: task,
         type,
       });
@@ -125,3 +129,19 @@ export default function Daily() {
     </Page>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async({ req }) => {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};

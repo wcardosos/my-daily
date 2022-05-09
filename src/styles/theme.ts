@@ -9,6 +9,7 @@ const styles = {
   global: {
     'html, body': {
       bgColor: 'gray.50',
+      color: 'gray.800',
     },
   },
 };
