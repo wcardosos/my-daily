@@ -30,6 +30,7 @@ export class TasksController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<void> {
+    const { user } = request.body;
     const prismaClient = new PrismaClient();
 
     const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
@@ -38,7 +39,7 @@ export class TasksController {
     let dailyTodayId = await dailyRepository.getToday();
 
     if (!dailyTodayId) {
-      dailyTodayId = await dailyRepository.saveToday();
+      dailyTodayId = await dailyRepository.saveToday(user);
     }
 
     const tasks = await tasksRepository.getByDaily(dailyTodayId as string);
@@ -67,7 +68,7 @@ export class TasksController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<void> {
-    const { name, type } = request.body;
+    const { user, name, type } = request.body;
     const prismaClient = new PrismaClient();
 
     const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
@@ -76,7 +77,7 @@ export class TasksController {
     let dailyTodayId = await dailyRepository.getToday();
 
     if (!dailyTodayId) {
-      dailyTodayId = await dailyRepository.saveToday();
+      dailyTodayId = await dailyRepository.saveToday(user);
     }
 
     const newTask = new Task(dailyTodayId, name, type);
