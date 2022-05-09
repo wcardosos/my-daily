@@ -1,4 +1,5 @@
 import React from 'react';
+import { signOut } from 'next-auth/react';
 import {
   Stack,
 } from '@chakra-ui/react';
@@ -12,6 +13,8 @@ import NavLink from './NavLink';
 import NavSection from './NavSection';
 
 export default function Nav() {
+  const handleSignout = () => signOut();
+
   return (
     <Stack data-testid="nav" spacing="12" align="flex-start">
       <NavSection title="DAYLY">
@@ -20,7 +23,7 @@ export default function Nav() {
       </NavSection>
       <NavSection title="CONTA">
         <NavLink href="/config" icon={RiSettings4Fill} text="Configurações" />
-        <NavLink href={null} icon={RiLogoutBoxRLine} text="Sair" onClick={() => console.log('Logout')} />
+        <NavLink href={null} icon={RiLogoutBoxRLine} text="Sair" onClick={handleSignout} />
       </NavSection>
     </Stack>
   );
