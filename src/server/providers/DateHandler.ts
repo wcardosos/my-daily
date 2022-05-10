@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 export class DateHandler {
   private static formatDate(date: Date): string {
-    return format(date, 'dd/M/yyyy');
+    return format(date, 'd/M/yyyy');
   }
 
   public static getToday(): string {
