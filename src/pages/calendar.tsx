@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import {
   Box,
   Center,
@@ -21,8 +23,15 @@ interface ICalendarData {
   whatWasDone: ITask[]
 }
 
-export default function Calendar() {
+interface ICalendarProps {
+  user: {
+    email: string
+  }
+}
+
+export default function Calendar({ user: { email: userEmail } }: ICalendarProps) {
   const [dateToSearch, setDateToSearch] = useState<Date | null>(null);
+  const [notFoundTasks, setNotFoundTasks] = useState<boolean>(false);
   const [dateNotSelected, setDateNotSelected] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dailyInfo, setDailyInfo] = useState<ICalendarData>(null);
@@ -34,20 +43,26 @@ export default function Calendar() {
       setDateNotSelected(false);
     }
     setDailyInfo(null);
+    setNotFoundTasks(false);
     setIsLoading(true);
 
     const date = new Date(dateToSearch);
-    const { data } = await axios.get(`/api/tasks?dateToSearch=${date.toString()}`);
+    const { data } = await axios.get(`/api/tasks?dateToSearch=${date.toString()}&userEmail=${userEmail}`);
 
-    const doneList = data.filter((item: ITask) => item.type === 'done');
-    const toDoList = data.filter((item: ITask) => item.type === 'to_do');
-    const locksList = data.filter((item: ITask) => item.type === 'lock');
+    if (data.length) {
+      const doneList = data.filter((item: ITask) => item.type === 'done');
+      const toDoList = data.filter((item: ITask) => item.type === 'to_do');
+      const locksList = data.filter((item: ITask) => item.type === 'lock');
 
-    setDailyInfo({
-      whatWantToDo: toDoList,
-      whatWasDone: doneList,
-      locks: locksList,
-    });
+      setDailyInfo({
+        whatWantToDo: toDoList,
+        whatWasDone: doneList,
+        locks: locksList,
+      });
+    } else {
+      setNotFoundTasks(true);
+    }
+
     setIsLoading(false);
   };
 
@@ -69,6 +84,11 @@ export default function Calendar() {
             <Text>Selecione uma data</Text>
           </Center>
         ) }
+        { !dateNotSelected && notFoundTasks && (
+          <Center h="25vh">
+            <Text>Nenhuma tarefa encontrada na data informada</Text>
+          </Center>
+        ) }
         { isLoading && (
           <Center h="25vh">
             <Spinner size="xl" color="purple.700" />
@@ -85,3 +105,23 @@ export default function Calendar() {
     </Page>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async({ req }) => {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      user: {
+        email: session.user.email,
+      },
+    },
+  };
+};
