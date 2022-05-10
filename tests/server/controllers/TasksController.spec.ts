@@ -29,6 +29,7 @@ describe('Controller: Tasks', () => {
   const saveTaskRepositorySpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'save');
   const deleteTaskRepositorySpy = jest.spyOn(TaskPrismaPostgresRepository.prototype, 'delete');
 
+  const getIdByDateDailyRepositorySpy = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'getIdByDate');
   const getTodayDailyRepositorySpy = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'getToday');
   const saveTodayDailyRepositorySpy = jest.spyOn(DailyPrismaPostgresRepository.prototype, 'saveToday');
 
@@ -40,6 +41,7 @@ describe('Controller: Tasks', () => {
 
   describe('getByDaily', () => {
     requestMock.query.dateToSearch = 'date';
+    requestMock.query.userEmail = 'email';
 
     it('Should return the tasks', async() => {
       getByDailyTaskRepositorySpy.mockResolvedValue([
@@ -47,6 +49,7 @@ describe('Controller: Tasks', () => {
         'task 2' as unknown as TaskPrisma,
       ]);
       getFormattedDateHandlerSpy.mockReturnValue('date formatted');
+      getIdByDateDailyRepositorySpy.mockResolvedValue('daily id');
       const dateMock = jest.fn();
       global.Date = dateMock as unknown as typeof Date;
 
@@ -56,7 +59,7 @@ describe('Controller: Tasks', () => {
 
       expect(dateMock).toHaveBeenCalledWith('date');
       expect(getFormattedDateHandlerSpy).toHaveBeenCalled();
-      expect(getByDailyTaskRepositorySpy).toHaveBeenCalledWith('date formatted');
+      expect(getByDailyTaskRepositorySpy).toHaveBeenCalledWith('daily id');
       expect(responseJsonSpy).toHaveBeenCalled();
     });
   });

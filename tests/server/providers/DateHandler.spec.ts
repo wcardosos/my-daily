@@ -25,5 +25,13 @@ describe('Provider: DateHandler', () => {
 
       expect(result).toBe('14/4/2022');
     });
+
+    it('Should return the day with non-zero when the day is less than 10', () => {
+      const dateLessThan10Mock = new Date('2022/05/09');
+
+      const result = DateHandler.getFormatted(dateLessThan10Mock);
+
+      expect(result).toBe('9/5/2022');
+    });
   });
 });
