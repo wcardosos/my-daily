@@ -11,17 +11,24 @@ export class TasksController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<void> {
-    const { dateToSearch } = request.query;
+    const { dateToSearch, userEmail } = request.query;
 
     const date = new Date(dateToSearch as string);
 
-    const dailyId = DateHandler.getFormatted(date);
+    const dailyDate = DateHandler.getFormatted(date);
 
     const prismaClient = new PrismaClient();
 
     const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+    const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
 
-    const tasks = await tasksRepository.getByDaily(dailyId as string);
+    const dailyId = await dailyRepository.getIdByDate(dailyDate, userEmail as string);
+
+    if (!dailyId) {
+      return response.json([]);
+    }
+
+    const tasks = await tasksRepository.getByDaily(dailyId);
 
     return response.json(tasks);
   }
