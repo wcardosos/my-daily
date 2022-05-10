@@ -12,11 +12,11 @@ export class DailyPrismaPostgresRepository {
   }
 
   public async getToday(user: string): Promise<string | null> {
-    const newDailyId = DateHandler.getToday();
+    const dailyDate = DateHandler.getToday();
 
     const daily = await this.client.daily.findFirst({
       where: {
-        id: newDailyId,
+        date: dailyDate,
         user: {
           email: user,
         },
@@ -31,15 +31,15 @@ export class DailyPrismaPostgresRepository {
   }
 
   public async saveToday(userEmail: string): Promise<string> {
-    const newDailyId = DateHandler.getToday();
+    const dailyDate = DateHandler.getToday();
 
-    await this.client.daily.create({
+    const newDaily = await this.client.daily.create({
       data: {
-        id: newDailyId,
+        date: dailyDate,
         user_id: userEmail,
       },
     });
 
-    return newDailyId;
+    return newDaily.id;
   }
 }
