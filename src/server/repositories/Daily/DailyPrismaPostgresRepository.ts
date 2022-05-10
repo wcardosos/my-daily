@@ -11,6 +11,23 @@ export class DailyPrismaPostgresRepository {
     this.client = client;
   }
 
+  public async getIdByDate(date: string, userEmail: string): Promise<string | null> {
+    const daily = await this.client.daily.findFirst({
+      where: {
+        date,
+        user: {
+          email: userEmail,
+        },
+      },
+    });
+
+    if (!daily) {
+      return null;
+    }
+
+    return daily.id;
+  }
+
   public async getToday(user: string): Promise<string | null> {
     const dailyDate = DateHandler.getToday();
 

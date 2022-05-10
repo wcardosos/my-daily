@@ -16,6 +16,35 @@ describe('Repository: DailyPrismaPostgres', () => {
 
   const dailyPrismaPostgresRepository = new DailyPrismaPostgresRepository(prismaClientMock);
 
+  describe('getIdByDate', () => {
+    const dateMock = 'date';
+    const userEmailMock = 'email';
+
+    it('Should return the daily id', async() => {
+      dailyPrismaMock.findFirst.mockResolvedValueOnce({ id: 'daily id' });
+
+      const result = await dailyPrismaPostgresRepository.getIdByDate(dateMock, userEmailMock);
+
+      expect(dailyPrismaMock.findFirst).toHaveBeenCalledWith({
+        where: {
+          date: 'date',
+          user: {
+            email: 'email',
+          },
+        },
+      });
+      expect(result).toBe('daily id');
+    });
+
+    it('Should return null when the daily does not exists', async() => {
+      dailyPrismaMock.findFirst.mockResolvedValueOnce(null);
+
+      const result = await dailyPrismaPostgresRepository.getIdByDate(dateMock, userEmailMock);
+
+      expect(result).toBeNull();
+    });
+  });
+
   describe('getToday', () => {
     it('Should return the id when the daily exists', async() => {
       dailyPrismaMock.findFirst.mockResolvedValue({ id: 'daily id' });
