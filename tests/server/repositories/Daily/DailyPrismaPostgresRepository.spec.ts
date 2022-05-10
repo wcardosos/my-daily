@@ -6,7 +6,7 @@ describe('Repository: DailyPrismaPostgres', () => {
   const prismaClientMock = {} as jest.MockedObject<PrismaClient>;
   const dailyPrismaMock = {
     create: jest.fn(),
-    findUnique: jest.fn(),
+    findFirst: jest.fn(),
   };
   const getTodayDateHandlerSpy = jest.spyOn(DateHandler, 'getToday');
 
@@ -19,20 +19,30 @@ describe('Repository: DailyPrismaPostgres', () => {
     getTodayDateHandlerSpy.mockReturnValue('id');
 
     it('Should return the id when the daily exists', async() => {
-      dailyPrismaMock.findUnique.mockResolvedValue({ id: 'daily id' });
+      dailyPrismaMock.findFirst.mockResolvedValue({ id: 'daily id' });
 
-      const result = await dailyPrismaPostgresRepository.getToday();
+      const result = await dailyPrismaPostgresRepository.getToday('user');
 
-      expect(dailyPrismaMock.findUnique).toHaveBeenCalledWith({ where: { id: 'id' } });
+      expect(dailyPrismaMock.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: 'id',
+          user: { email: 'user' },
+        },
+      });
       expect(result).toBe('daily id');
     });
 
     it('Should return null when the daily not exists', async() => {
-      dailyPrismaMock.findUnique.mockResolvedValue(null);
+      dailyPrismaMock.findFirst.mockResolvedValue(null);
 
-      const result = await dailyPrismaPostgresRepository.getToday();
+      const result = await dailyPrismaPostgresRepository.getToday('user');
 
-      expect(dailyPrismaMock.findUnique).toHaveBeenCalledWith({ where: { id: 'id' } });
+      expect(dailyPrismaMock.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: 'id',
+          user: { email: 'user' },
+        },
+      });
       expect(result).toBeNull();
     });
   });
