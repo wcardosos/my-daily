@@ -11,12 +11,15 @@ export class DailyPrismaPostgresRepository {
     this.client = client;
   }
 
-  public async getToday(): Promise<string | null> {
+  public async getToday(user: string): Promise<string | null> {
     const newDailyId = DateHandler.getToday();
 
-    const daily = await this.client.daily.findUnique({
+    const daily = await this.client.daily.findFirst({
       where: {
         id: newDailyId,
+        user: {
+          email: user,
+        },
       },
     });
 
@@ -27,13 +30,13 @@ export class DailyPrismaPostgresRepository {
     return daily.id;
   }
 
-  public async saveToday(user: string): Promise<string> {
+  public async saveToday(userEmail: string): Promise<string> {
     const newDailyId = DateHandler.getToday();
 
     await this.client.daily.create({
       data: {
         id: newDailyId,
-        user_id: user,
+        user_id: userEmail,
       },
     });
 

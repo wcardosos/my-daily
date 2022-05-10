@@ -32,11 +32,13 @@ export default function Header() {
       <Flex>
         { isDesktopVersion && (
           <>
-            <Profile
-              email={session.user.email}
-              name={session.user.name}
-              pictureUrl={session.user.image}
-            />
+            { session && (
+              <Profile
+                email={session.user.email}
+                name={session.user.name}
+                pictureUrl={session.user.image}
+              />
+            )}
             <Center px="4">
               <Divider borderColor="gray.500" orientation="vertical" />
             </Center>

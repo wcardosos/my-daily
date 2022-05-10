@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import {
   Box,
   Center,
@@ -26,14 +26,19 @@ import {
   ITask,
 } from '../contexts/DailyWorkContext';
 
-export default function Daily() {
+interface IDailyProps {
+  user: {
+    email: string
+  }
+}
+
+export default function Daily({ user: { email } }: IDailyProps) {
   const [whatWasDone, setWhatWasDone] = useState<Array<ITask>>([]);
   const [whatWantToDo, setWhatWantToDo] = useState<Array<ITask>>([]);
   const [locks, setLocks] = useState<Array<ITask>>([]);
-  const user = useSession();
 
   const { isLoading } = useQuery('getDailyTasks', async() => {
-    const response = await axios.get('/api/tasks/today');
+    const response = await axios.get(`/api/tasks/today?user=${email}`);
 
     const doneList = response.data.filter((item) => item.type === 'done');
     const toDoList = response.data.filter((item) => item.type === 'to_do');
@@ -59,7 +64,7 @@ export default function Daily() {
 
     if (task && !tasksList.includes(task as unknown as ITask)) {
       await axios.post('/api/tasks/create/today', {
-        user: user.data.email,
+        user: email,
         name: task,
         type,
       });
@@ -142,6 +147,10 @@ export const getServerSideProps: GetServerSideProps = async({ req }) => {
     };
   }
   return {
-    props: {},
+    props: {
+      user: {
+        email: session.user.email,
+      },
+    },
   };
 };
