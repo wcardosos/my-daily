@@ -9,6 +9,7 @@ describe('Repository: DailyPrismaPostgres', () => {
     findFirst: jest.fn(),
   };
   const getTodayDateHandlerSpy = jest.spyOn(DateHandler, 'getToday');
+  getTodayDateHandlerSpy.mockReturnValue('date');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prismaClientMock.daily = dailyPrismaMock as any;
@@ -16,8 +17,6 @@ describe('Repository: DailyPrismaPostgres', () => {
   const dailyPrismaPostgresRepository = new DailyPrismaPostgresRepository(prismaClientMock);
 
   describe('getToday', () => {
-    getTodayDateHandlerSpy.mockReturnValue('id');
-
     it('Should return the id when the daily exists', async() => {
       dailyPrismaMock.findFirst.mockResolvedValue({ id: 'daily id' });
 
@@ -25,7 +24,7 @@ describe('Repository: DailyPrismaPostgres', () => {
 
       expect(dailyPrismaMock.findFirst).toHaveBeenCalledWith({
         where: {
-          id: 'id',
+          date: 'date',
           user: { email: 'user' },
         },
       });
@@ -39,7 +38,7 @@ describe('Repository: DailyPrismaPostgres', () => {
 
       expect(dailyPrismaMock.findFirst).toHaveBeenCalledWith({
         where: {
-          id: 'id',
+          date: 'date',
           user: { email: 'user' },
         },
       });
@@ -48,7 +47,7 @@ describe('Repository: DailyPrismaPostgres', () => {
   });
 
   describe('saveToday', () => {
-    getTodayDateHandlerSpy.mockReturnValue('id');
+    dailyPrismaMock.create.mockResolvedValue({ id: 'daily id' });
 
     it('Should create the today daily', async() => {
       await dailyPrismaPostgresRepository.saveToday('user');

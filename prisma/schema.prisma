@@ -20,7 +20,8 @@ model User {
 }
 
 model Daily {
-  id            String @id
+  id            String @id @default(uuid())
+  date          String
   user_id       String
   tasks         Task[]
   created_at    DateTime @default(now())
