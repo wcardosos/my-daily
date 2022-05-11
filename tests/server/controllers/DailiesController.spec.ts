@@ -15,7 +15,7 @@ describe('Controller: Dailies', () => {
     json: responseJsonSpy,
   });
 
-  requestMock.query = { userEmail: 'user email' };
+  requestMock.query = { email: 'user email' };
 
   responseMock.status = statusMock;
   responseMock.json = responseJsonSpy;

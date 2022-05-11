@@ -8,7 +8,7 @@ export class DailiesController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<NextApiResponse> {
-    const { userEmail } = request.query;
+    const { email: userEmail } = request.query;
 
     const prismaClient = new PrismaClient();
 
