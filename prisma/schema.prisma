@@ -26,7 +26,7 @@ model Daily {
   tasks         Task[]
   created_at    DateTime @default(now())
 
-  user          User @relation(fields: [user_id], references: [email])
+  user          User @relation(fields: [user_id], references: [email], onDelete: Cascade)
   @@map("dailies")
 }
 
@@ -37,7 +37,7 @@ model Task {
   type          TaskType
   created_at    DateTime @default(now())
   
-  daily         Daily @relation(fields: [daily_id], references: [id])
+  daily         Daily @relation(fields: [daily_id], references: [id], onDelete: Cascade)
   @@map("tasks")
 }
 

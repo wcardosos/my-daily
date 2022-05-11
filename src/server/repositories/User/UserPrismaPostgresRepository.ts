@@ -37,4 +37,12 @@ export class UserPrismaPostgresRepository {
       },
     });
   }
+
+  public async delete(email: string): Promise<void> {
+    await this.client.user.delete({
+      where: {
+        email,
+      },
+    });
+  }
 }

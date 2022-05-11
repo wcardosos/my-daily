@@ -51,4 +51,19 @@ export class UsersController {
 
     return response.status(httpStatus.CREATED).end();
   }
+
+  public static async delete(
+    request: NextApiRequest,
+    response: NextApiResponse,
+  ): Promise<NextApiResponse> {
+    const { email } = request.query;
+
+    const prismaClient = new PrismaClient();
+
+    const usersRepository = new UserPrismaPostgresRepository(prismaClient);
+
+    await usersRepository.delete(email as string);
+
+    return response.status(httpStatus.ACCEPTED).end();
+  }
 }

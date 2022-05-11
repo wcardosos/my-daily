@@ -7,6 +7,7 @@ import httpStatus from '../../../src/utils/httpStatus';
 jest.mock('@prisma/client');
 jest.mock('../../../src/server/repositories/Task/TaskPrismaPostgresRepository');
 jest.mock('../../../src/server/repositories/Daily/DailyPrismaPostgresRepository');
+jest.mock('../../../src/server/repositories/User/UserPrismaPostgresRepository');
 
 describe('Controller: Tasks', () => {
   const requestMock = {} as NextApiRequest;
@@ -24,6 +25,7 @@ describe('Controller: Tasks', () => {
   responseMock.json = responseJsonSpy;
 
   const getByEmailUserRepositorySpy = jest.spyOn(UserPrismaPostgresRepository.prototype, 'getByEmail');
+  const deleteUserRepositorySpy = jest.spyOn(UserPrismaPostgresRepository.prototype, 'delete');
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -42,6 +44,15 @@ describe('Controller: Tasks', () => {
       await UsersController.checkIfUserExists(requestMock, responseMock);
 
       expect(responseMock.status).toHaveBeenCalledWith(httpStatus.NOT_FOUND);
+    });
+  });
+
+  describe('delete', () => {
+    it('Should delete a user', async() => {
+      await UsersController.delete(requestMock, responseMock);
+
+      expect(deleteUserRepositorySpy).toHaveBeenCalledWith('email');
+      expect(responseMock.status).toHaveBeenCalledWith(httpStatus.ACCEPTED);
     });
   });
 });

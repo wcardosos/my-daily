@@ -59,4 +59,14 @@ export class DailyPrismaPostgresRepository {
 
     return newDaily.id;
   }
+
+  public async deleteAllByUser(userEmail: string): Promise<void> {
+    await this.client.daily.deleteMany({
+      where: {
+        user: {
+          email: userEmail,
+        },
+      },
+    });
+  }
 }
