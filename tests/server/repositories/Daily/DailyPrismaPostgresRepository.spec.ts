@@ -7,6 +7,7 @@ describe('Repository: DailyPrismaPostgres', () => {
   const dailyPrismaMock = {
     create: jest.fn(),
     findFirst: jest.fn(),
+    deleteMany: jest.fn(),
   };
   const getTodayDateHandlerSpy = jest.spyOn(DateHandler, 'getToday');
   getTodayDateHandlerSpy.mockReturnValue('date');
@@ -82,6 +83,22 @@ describe('Repository: DailyPrismaPostgres', () => {
       await dailyPrismaPostgresRepository.saveToday('user');
 
       expect(dailyPrismaMock.create).toHaveBeenCalledWith({ data: expect.objectContaining({ user_id: 'user' }) });
+    });
+  });
+
+  describe('deleteAllByUser', () => {
+    const userEmailMock = 'user email';
+
+    it('Should delete all user\'s dailies', async() => {
+      await dailyPrismaPostgresRepository.deleteAllByUser(userEmailMock);
+
+      expect(dailyPrismaMock.deleteMany).toHaveBeenCalledWith({
+        where: {
+          user: {
+            email: userEmailMock,
+          },
+        },
+      });
     });
   });
 });
