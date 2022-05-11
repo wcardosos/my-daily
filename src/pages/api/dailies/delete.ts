@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { UsersController } from '../../../server/controllers/UsersController';
+import { DailiesController } from '../../../server/controllers/DailiesController';
 import httpStatus from '../../../utils/httpStatus';
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   response: NextApiResponse,
 ): Promise<NextApiResponse | void> {
   if (request.method === 'DELETE') {
-    return UsersController.delete(request, response);
+    return DailiesController.deleteByUser(request, response);
   }
 
   return response.status(httpStatus.METHOD_NOT_ALLOWED).end();
