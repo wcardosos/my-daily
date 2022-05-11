@@ -42,4 +42,18 @@ describe('Repository: UserPrismaPostgres', () => {
       });
     });
   });
+
+  describe('delete', () => {
+    const userEmailMock = 'user email';
+
+    it('Should delete a user', async() => {
+      await userPrismaPostgresRepository.delete(userEmailMock);
+
+      expect(userPrismaMock.delete).toHaveBeenCalledWith({
+        where: {
+          email: userEmailMock,
+        },
+      });
+    });
+  });
 });
