@@ -20,6 +20,7 @@ import httpStatus from '../../utils/httpStatus';
 export default function Processing() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
+  const [newUserName, setNewUserName] = useState<string | null>(null);
   
   const router = useRouter();
 
@@ -35,12 +36,17 @@ export default function Processing() {
         }
       } catch (error) {
         setIsNewUser(true);
+        
         const { email, name, image } = user;
+        
+        setNewUserName(name);
+        
         await axios.post('/api/users', {
           email,
           name,
           image,
         });
+        
         setIsLoading(false);  
       }
     }
@@ -76,7 +82,7 @@ export default function Processing() {
               <Logo />
             </Center>
             <Box py={['16', '8']}>
-              <Text fontSize="32">Bem vindo!</Text>
+              <Text fontSize="32">{`Bem vindo ${newUserName}!`}</Text>
               <Text color="gray.600">Obrigado por usar nosso app</Text>
             </Box>
             <Box>
