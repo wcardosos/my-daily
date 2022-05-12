@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '../lib/prisma';
 import { Task } from '../entities/Task';
 import { DateHandler } from '../providers/DateHandler';
 import { DailyPrismaPostgresRepository } from '../repositories/Daily/DailyPrismaPostgresRepository';
@@ -17,10 +17,8 @@ export class TasksController {
 
     const dailyDate = DateHandler.getFormatted(date);
 
-    const prismaClient = new PrismaClient();
-
-    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
-    const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
+    const tasksRepository = new TaskPrismaPostgresRepository(prisma);
+    const dailyRepository = new DailyPrismaPostgresRepository(prisma);
 
     const dailyId = await dailyRepository.getIdByDate(dailyDate, userEmail as string);
 
@@ -38,10 +36,9 @@ export class TasksController {
     response: NextApiResponse,
   ): Promise<void> {
     const { user } = request.query;
-    const prismaClient = new PrismaClient();
 
-    const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
-    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+    const dailyRepository = new DailyPrismaPostgresRepository(prisma);
+    const tasksRepository = new TaskPrismaPostgresRepository(prisma);
 
     let dailyTodayId = await dailyRepository.getToday(user as string);
 
@@ -60,9 +57,8 @@ export class TasksController {
   ): Promise<NextApiResponse> {
     const { name, type } = request.body;
     const { dailyId } = request.query;
-    const prismaClient = new PrismaClient();
 
-    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+    const tasksRepository = new TaskPrismaPostgresRepository(prisma);
 
     const newTask = new Task(dailyId as string, name, type);
 
@@ -76,10 +72,9 @@ export class TasksController {
     response: NextApiResponse,
   ): Promise<void> {
     const { user, name, type } = request.body;
-    const prismaClient = new PrismaClient();
 
-    const dailyRepository = new DailyPrismaPostgresRepository(prismaClient);
-    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+    const dailyRepository = new DailyPrismaPostgresRepository(prisma);
+    const tasksRepository = new TaskPrismaPostgresRepository(prisma);
 
     let dailyTodayId = await dailyRepository.getToday(user);
 
@@ -100,9 +95,7 @@ export class TasksController {
   ): Promise<NextApiResponse> {
     const { id } = request.query;
 
-    const prismaClient = new PrismaClient();
-
-    const tasksRepository = new TaskPrismaPostgresRepository(prismaClient);
+    const tasksRepository = new TaskPrismaPostgresRepository(prisma);
 
     await tasksRepository.delete(id as string);
 
