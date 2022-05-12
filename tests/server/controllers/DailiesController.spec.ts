@@ -3,6 +3,7 @@ import { DailiesController } from '../../../src/server/controllers/DailiesContro
 import { DailyPrismaPostgresRepository } from '../../../src/server/repositories/Daily/DailyPrismaPostgresRepository';
 
 jest.mock('@prisma/client');
+jest.mock('../../../src/server/lib/prisma');
 jest.mock('../../../src/server/repositories/Daily/DailyPrismaPostgresRepository');
 
 describe('Controller: Dailies', () => {

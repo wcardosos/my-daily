@@ -7,6 +7,7 @@ import { DailyPrismaPostgresRepository } from '../../../src/server/repositories/
 import { DateHandler } from '../../../src/server/providers/DateHandler';
 
 jest.mock('@prisma/client');
+jest.mock('../../../src/server/lib/prisma');
 jest.mock('../../../src/server/repositories/Task/TaskPrismaPostgresRepository');
 jest.mock('../../../src/server/repositories/Daily/DailyPrismaPostgresRepository');
 

@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '../lib/prisma';
 import { UserPrismaPostgresRepository } from '../repositories/User/UserPrismaPostgresRepository';
 import httpStatus from '../../utils/httpStatus';
 import { User } from '../entities/User';
@@ -9,9 +9,7 @@ export class UsersController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<NextApiResponse> {
-    const prismaClient = new PrismaClient();
-
-    const usersRepository = new UserPrismaPostgresRepository(prismaClient);
+    const usersRepository = new UserPrismaPostgresRepository(prisma);
 
     const { email } = request.query;
 
@@ -28,9 +26,7 @@ export class UsersController {
     request: NextApiRequest,
     response: NextApiResponse,
   ): Promise<NextApiResponse> {
-    const prismaClient = new PrismaClient();
-
-    const usersRepository = new UserPrismaPostgresRepository(prismaClient);
+    const usersRepository = new UserPrismaPostgresRepository(prisma);
 
     const {
       email,
@@ -58,9 +54,7 @@ export class UsersController {
   ): Promise<NextApiResponse> {
     const { email } = request.query;
 
-    const prismaClient = new PrismaClient();
-
-    const usersRepository = new UserPrismaPostgresRepository(prismaClient);
+    const usersRepository = new UserPrismaPostgresRepository(prisma);
 
     await usersRepository.delete(email as string);
 

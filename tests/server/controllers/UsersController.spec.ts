@@ -6,6 +6,7 @@ import { UserPrismaPostgresRepository } from '../../../src/server/repositories/U
 import httpStatus from '../../../src/utils/httpStatus';
 
 jest.mock('@prisma/client');
+jest.mock('../../../src/server/lib/prisma');
 jest.mock('../../../src/server/repositories/Task/TaskPrismaPostgresRepository');
 jest.mock('../../../src/server/repositories/Daily/DailyPrismaPostgresRepository');
 jest.mock('../../../src/server/repositories/User/UserPrismaPostgresRepository');
