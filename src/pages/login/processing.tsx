@@ -86,7 +86,12 @@ export default function Processing() {
               <Text color="gray.600">Obrigado por usar nosso app</Text>
             </Box>
             <Box>
-              <Link href="/daily">
+              <Link
+                href="/daily"
+                _hover={{
+                  textDecoration: null,
+                }}
+              >
                 <Button
                   colorScheme="purple"
                   bgColor="purple.700"
