@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import axios from 'axios';
-import { ITask } from '../contexts/DailyWorkContext';
+import { ITask } from '../interfaces/ITask';
 import DatePicker from '../components/DatePicker';
 import Page from '../components/Page';
 import Button from '../components/Button';

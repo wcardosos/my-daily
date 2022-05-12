@@ -1,7 +1,7 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ITask } from '../../src/contexts/DailyWorkContext';
+import { ITask } from '../../src/interfaces/ITask';
 import WorkEventsHandler from '../../src/components/WorkEventsHandler';
 import '@testing-library/jest-dom/extend-expect';
 

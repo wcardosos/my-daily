@@ -10,7 +10,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import WorkCard from './WorkCard';
-import { ITask } from '../contexts/DailyWorkContext';
+import { ITask } from '../interfaces/ITask';
 
 interface IWorkEventsHandlerProps {
   title: string

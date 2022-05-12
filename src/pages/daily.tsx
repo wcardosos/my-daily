@@ -23,9 +23,7 @@ import ResumeCard from '../components/ResumeCard';
 import ResumeEvent from '../components/ResumeEvent';
 import TabTitle from '../components/TabTitle';
 import WorkEventsHandler from '../components/WorkEventsHandler';
-import {
-  ITask,
-} from '../contexts/DailyWorkContext';
+import { ITask } from '../interfaces/ITask';
 
 interface IDailyProps {
   user: {

@@ -4,7 +4,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { ITask } from '../contexts/DailyWorkContext';
+import { ITask } from '../interfaces/ITask';
 
 interface IResumeEventProps {
   title: string
