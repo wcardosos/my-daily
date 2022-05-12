@@ -16,6 +16,7 @@ import {
   RiTodoFill as ResumeIcon,
 } from 'react-icons/ri';
 import { useQuery, useQueryClient } from 'react-query';
+import Head from 'next/head';
 import axios from 'axios';
 import Page from '../components/Page';
 import ResumeCard from '../components/ResumeCard';
@@ -79,59 +80,64 @@ export default function Daily({ user: { email } }: IDailyProps) {
   };
 
   return (
-    <Page>
-      <Box w="100%">
-        <Tabs variant="unstyled">
-          <TabList>
-            <TabTitle icon={<TasksIcon />} title="Tarefas" />
-            <TabTitle icon={<ResumeIcon />} title="Resumo" />
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              {
-                isLoading
-                  ? (
-                    <Center h="50vh">
-                      <Spinner color="purple.700" />
-                    </Center>
-                  ) : (
-                    <VStack align="flex-start" spacing="8">
-                      <WorkEventsHandler
-                        title="O que foi feito"
-                        tasks={whatWasDone}
-                        type="done"
-                        add={addTask}
-                        remove={removeTask}
-                      />
-                      <WorkEventsHandler
-                        title="O que se pretende fazer"
-                        tasks={whatWantToDo}
-                        type="to_do"
-                        add={addTask}
-                        remove={removeTask}
-                      />
-                      <WorkEventsHandler
-                        title="Travas"
-                        tasks={locks}
-                        type="lock"
-                        add={addTask}
-                        remove={removeTask}
-                      />
-                    </VStack>
-                  )
-              }
-            </TabPanel>
-            <TabPanel>
-              <ResumeCard>
-                <ResumeEvent title="O que foi feito" tasks={whatWasDone} />
-                <ResumeEvent title="O que se pretende fazer" tasks={whatWantToDo} />
-                <ResumeEvent title="Travas" tasks={locks} />
-              </ResumeCard>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
-    </Page>
+    <>
+      <Head>
+        <title>Hoje - myDaily</title>
+      </Head>
+      <Page>
+        <Box w="100%">
+          <Tabs variant="unstyled">
+            <TabList>
+              <TabTitle icon={<TasksIcon />} title="Tarefas" />
+              <TabTitle icon={<ResumeIcon />} title="Resumo" />
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {
+                  isLoading
+                    ? (
+                      <Center h="50vh">
+                        <Spinner color="purple.700" />
+                      </Center>
+                    ) : (
+                      <VStack align="flex-start" spacing="8">
+                        <WorkEventsHandler
+                          title="O que foi feito"
+                          tasks={whatWasDone}
+                          type="done"
+                          add={addTask}
+                          remove={removeTask}
+                        />
+                        <WorkEventsHandler
+                          title="O que se pretende fazer"
+                          tasks={whatWantToDo}
+                          type="to_do"
+                          add={addTask}
+                          remove={removeTask}
+                        />
+                        <WorkEventsHandler
+                          title="Travas"
+                          tasks={locks}
+                          type="lock"
+                          add={addTask}
+                          remove={removeTask}
+                        />
+                      </VStack>
+                    )
+                }
+              </TabPanel>
+              <TabPanel>
+                <ResumeCard>
+                  <ResumeEvent title="O que foi feito" tasks={whatWasDone} />
+                  <ResumeEvent title="O que se pretende fazer" tasks={whatWantToDo} />
+                  <ResumeEvent title="Travas" tasks={locks} />
+                </ResumeCard>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
+      </Page>
+    </>
   );
 }
 

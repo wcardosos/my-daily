@@ -1,7 +1,6 @@
 /* eslint-disable no-trailing-spaces */
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -11,6 +10,8 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import Logo from '../../components/Logo';
 import AuthSectionInfo from '../../components/AuthSectionInfo';
@@ -47,43 +48,53 @@ export default function Processing() {
   }, [router]);
 
   return isLoading ? (
-    <Center w="100%" h="100vh">
-      <Spinner size="lg" />
-    </Center>
+    <>
+      <Head>
+        <title>Autenticando - myDaily</title>
+      </Head>
+      <Center w="100%" h="100vh">
+        <Spinner size="lg" />
+      </Center>
+    </>
   ) : isNewUser && (
-    <Box w="100%">
-      <Stack
-        w="100%"
-        direction={['column', 'row']}
-      >
-        <Box
-          w={['100%', '100%', '50%']}
-          h="100vh"
-          px={['6', '16']}
-          py={['16', '8']}
+    <>
+      <Head>
+        <title>Seja bem vindo - myDaily</title>
+      </Head>
+      <Box w="100%">
+        <Stack
+          w="100%"
+          direction={['column', 'row']}
         >
-          <Center>
-            <Logo />
-          </Center>
-          <Box py={['16', '8']}>
-            <Text fontSize="32">Bem vindo!</Text>
-            <Text color="gray.600">Obrigado por usar nosso app</Text>
+          <Box
+            w={['100%', '100%', '50%']}
+            h="100vh"
+            px={['6', '16']}
+            py={['16', '8']}
+          >
+            <Center>
+              <Logo />
+            </Center>
+            <Box py={['16', '8']}>
+              <Text fontSize="32">Bem vindo!</Text>
+              <Text color="gray.600">Obrigado por usar nosso app</Text>
+            </Box>
+            <Box>
+              <Link href="/daily">
+                <Button
+                  colorScheme="purple"
+                  bgColor="purple.700"
+                  color="gray.50"
+                  h="48px"
+                >
+                  Acessar myDaily
+                </Button>
+              </Link>
+            </Box>
           </Box>
-          <Box>
-            <Link href="/daily">
-              <Button
-                colorScheme="purple"
-                bgColor="purple.700"
-                color="gray.50"
-                h="48px"
-              >
-                Acessar myDaily
-              </Button>
-            </Link>
-          </Box>
-        </Box>
-        <AuthSectionInfo />
-      </Stack>
-    </Box>
+          <AuthSectionInfo />
+        </Stack>
+      </Box>
+    </>
   );
 }

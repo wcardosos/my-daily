@@ -9,6 +9,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
+import Head from 'next/head';
 import axios from 'axios';
 import { ITask } from '../contexts/DailyWorkContext';
 import DatePicker from '../components/DatePicker';
@@ -67,42 +68,47 @@ export default function Calendar({ user: { email: userEmail } }: ICalendarProps)
   };
 
   return (
-    <Page>
-      <Box w="100%">
-        <Heading color="purple.700">Calendário</Heading>
-        <Box pt={['4', '16']}>
-          <Text>Selecione a data:</Text>
-          <Flex pt="4" pb="8">
-            <Box mr={['4', '8']}>
-              <DatePicker date={dateToSearch} onChange={onChangeDatePicker} />
-            </Box>
-            <Button size="normal" text="Buscar" onClick={onClickSearchDailyByDate} />
-          </Flex>
+    <>
+      <Head>
+        <title>Calendário - myDaily</title>
+      </Head>
+      <Page>
+        <Box w="100%">
+          <Heading color="purple.700">Calendário</Heading>
+          <Box pt={['4', '16']}>
+            <Text>Selecione a data:</Text>
+            <Flex pt="4" pb="8">
+              <Box mr={['4', '8']}>
+                <DatePicker date={dateToSearch} onChange={onChangeDatePicker} />
+              </Box>
+              <Button size="normal" text="Buscar" onClick={onClickSearchDailyByDate} />
+            </Flex>
+          </Box>
+          { dateNotSelected && (
+            <Center h="25vh">
+              <Text>Selecione uma data</Text>
+            </Center>
+          ) }
+          { !dateNotSelected && notFoundTasks && (
+            <Center h="25vh">
+              <Text>Nenhuma tarefa encontrada na data informada</Text>
+            </Center>
+          ) }
+          { isLoading && (
+            <Center h="25vh">
+              <Spinner size="xl" color="purple.700" />
+            </Center>
+          ) }
+          { dailyInfo && (
+            <ResumeCard>
+              <ResumeEvent title="O que foi feito" tasks={dailyInfo.whatWasDone} />
+              <ResumeEvent title="O que se pretende fazer" tasks={dailyInfo.whatWantToDo} />
+              <ResumeEvent title="Travas" tasks={dailyInfo.locks} />
+            </ResumeCard>
+          ) }
         </Box>
-        { dateNotSelected && (
-          <Center h="25vh">
-            <Text>Selecione uma data</Text>
-          </Center>
-        ) }
-        { !dateNotSelected && notFoundTasks && (
-          <Center h="25vh">
-            <Text>Nenhuma tarefa encontrada na data informada</Text>
-          </Center>
-        ) }
-        { isLoading && (
-          <Center h="25vh">
-            <Spinner size="xl" color="purple.700" />
-          </Center>
-        ) }
-        { dailyInfo && (
-          <ResumeCard>
-            <ResumeEvent title="O que foi feito" tasks={dailyInfo.whatWasDone} />
-            <ResumeEvent title="O que se pretende fazer" tasks={dailyInfo.whatWantToDo} />
-            <ResumeEvent title="Travas" tasks={dailyInfo.locks} />
-          </ResumeCard>
-        ) }
-      </Box>
-    </Page>
+      </Page>
+    </>
   );
 }
 
