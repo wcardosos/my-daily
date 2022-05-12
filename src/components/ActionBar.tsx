@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Button,
+  Link,
   HStack,
 } from '@chakra-ui/react';
 import {
@@ -15,9 +16,11 @@ interface IActionBarProps {
 export default function ActionBar({ handleLogout }: IActionBarProps) {
   return (
     <HStack data-testid="action-bar" spacing="2">
-      <Button data-testid="settings-button" variant="ghost">
-        <SettingsIcon fontSize="24" />
-      </Button>
+      <Link href="/config">
+        <Button data-testid="settings-button" variant="ghost">
+          <SettingsIcon fontSize="24" />
+        </Button>
+      </Link>
       <Button variant="ghost" onClick={handleLogout}>
         <LogoutIcon data-testid="logout-button" fontSize="24" />
       </Button>
