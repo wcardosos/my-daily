@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { ITask } from '../../src/contexts/DailyWorkContext';
+import { ITask } from '../../src/interfaces/ITask';
 import ResumeEvent from '../../src/components/ResumeEvent';
 import '@testing-library/jest-dom/extend-expect';
 
