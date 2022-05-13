@@ -59,7 +59,7 @@ export default function Processing() {
         <title>Autenticando - myDaily</title>
       </Head>
       <Center w="100%" h="100vh">
-        <Spinner size="lg" />
+        <Spinner color="purple.700" size="lg" />
       </Center>
     </>
   ) : isNewUser && (
