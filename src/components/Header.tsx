@@ -45,7 +45,7 @@ export default function Header() {
             <ActionBar handleLogout={handleLogout} />
           </>
         )}
-        { !isDesktopVersion && <Drawer /> }
+        { !isDesktopVersion && <Drawer profileInfo={session?.user} /> }
       </Flex>
     </Flex>
   );

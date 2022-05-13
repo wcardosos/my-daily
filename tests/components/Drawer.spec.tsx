@@ -19,8 +19,14 @@ describe('Component: Drawer', () => {
   const useRouterMock = useRouter as jest.MockedFunction<typeof useRouter>;
   useRouterMock.mockReturnValue({ asPath: '/test' } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
+  const profileInfoMock = {
+    user: 'user',
+    email: 'email',
+    image: 'image',
+  };
+
   beforeEach(() => {
-    render(<Drawer />);
+    render(<Drawer profileInfo={profileInfoMock} />);
   });
 
   afterEach(() => {

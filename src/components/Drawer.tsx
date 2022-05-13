@@ -15,7 +15,17 @@ import Profile from './Profile';
 import Nav from './Nav';
 import Logo from './Logo';
 
-export default function Drawer() {
+interface User {
+  email?: string
+  name?: string
+  image?: string
+}
+
+interface IDrawerProps {
+  profileInfo: User | undefined
+}
+
+export default function Drawer({ profileInfo }: IDrawerProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const menuButtonRef = useRef();
 
@@ -42,7 +52,15 @@ export default function Drawer() {
           <DrawerHeader fontWeight={400} py="8">
             <VStack align="flex-start" spacing="4">
               <Logo />
-              <Profile email="wagner@email.com" name="Wagner Cardoso" />
+              {
+                profileInfo && (
+                  <Profile
+                    email={profileInfo.email}
+                    name={profileInfo.name}
+                    pictureUrl={profileInfo.image}
+                  />
+                )
+              }
             </VStack>
           </DrawerHeader>
           <DrawerBody>
