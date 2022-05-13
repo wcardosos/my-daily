@@ -16,7 +16,7 @@ import AuthSectionInfo from '../../components/AuthSectionInfo';
 
 export default function Login() {
   const handleLogin = async() => {
-    signIn('github', { callbackUrl: '/login/processing' });
+    await signIn('github', { callbackUrl: '/login/processing' });
   };
 
   return (
