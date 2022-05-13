@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react';
 import {
   Box,
   Center,
+  Heading,
   Spinner,
   Tabs,
   TabList,
@@ -16,6 +17,7 @@ import {
   RiTodoFill as ResumeIcon,
 } from 'react-icons/ri';
 import { useQuery, useQueryClient } from 'react-query';
+import { format } from 'date-fns';
 import Head from 'next/head';
 import axios from 'axios';
 import Page from '../components/Page';
@@ -77,6 +79,8 @@ export default function Daily({ user: { email } }: IDailyProps) {
     queryClient.invalidateQueries();
   };
 
+  const today = new Date();
+
   return (
     <>
       <Head>
@@ -84,55 +88,58 @@ export default function Daily({ user: { email } }: IDailyProps) {
       </Head>
       <Page>
         <Box w="100%">
-          <Tabs variant="unstyled">
-            <TabList>
-              <TabTitle icon={<TasksIcon />} title="Tarefas" />
-              <TabTitle icon={<ResumeIcon />} title="Resumo" />
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                {
-                  isLoading
-                    ? (
-                      <Center h="50vh">
-                        <Spinner color="purple.700" />
-                      </Center>
-                    ) : (
-                      <VStack align="flex-start" spacing="8">
-                        <WorkEventsHandler
-                          title="O que foi feito"
-                          tasks={whatWasDone}
-                          type="done"
-                          add={addTask}
-                          remove={removeTask}
-                        />
-                        <WorkEventsHandler
-                          title="O que se pretende fazer"
-                          tasks={whatWantToDo}
-                          type="to_do"
-                          add={addTask}
-                          remove={removeTask}
-                        />
-                        <WorkEventsHandler
-                          title="Travas"
-                          tasks={locks}
-                          type="lock"
-                          add={addTask}
-                          remove={removeTask}
-                        />
-                      </VStack>
-                    )
-                }
-              </TabPanel>
-              <TabPanel>
-                <ResumeCard>
-                  <ResumeEvent title="O que foi feito" tasks={whatWasDone} />
-                  <ResumeEvent title="O que se pretende fazer" tasks={whatWantToDo} />
-                  <ResumeEvent title="Travas" tasks={locks} />
-                </ResumeCard>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <Heading color="purple.700" size="md">{`Daily de hoje, ${format(today, 'dd/MM/yy')}`}</Heading>
+          <Box pt={['4', '8']}>
+            <Tabs variant="unstyled">
+              <TabList>
+                <TabTitle icon={<TasksIcon />} title="Tarefas" />
+                <TabTitle icon={<ResumeIcon />} title="Resumo" />
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  {
+                    isLoading
+                      ? (
+                        <Center h="50vh">
+                          <Spinner color="purple.700" />
+                        </Center>
+                      ) : (
+                        <VStack align="flex-start" spacing="8">
+                          <WorkEventsHandler
+                            title="O que foi feito"
+                            tasks={whatWasDone}
+                            type="done"
+                            add={addTask}
+                            remove={removeTask}
+                          />
+                          <WorkEventsHandler
+                            title="O que se pretende fazer"
+                            tasks={whatWantToDo}
+                            type="to_do"
+                            add={addTask}
+                            remove={removeTask}
+                          />
+                          <WorkEventsHandler
+                            title="Travas"
+                            tasks={locks}
+                            type="lock"
+                            add={addTask}
+                            remove={removeTask}
+                          />
+                        </VStack>
+                      )
+                  }
+                </TabPanel>
+                <TabPanel>
+                  <ResumeCard>
+                    <ResumeEvent title="O que foi feito" tasks={whatWasDone} />
+                    <ResumeEvent title="O que se pretende fazer" tasks={whatWantToDo} />
+                    <ResumeEvent title="Travas" tasks={locks} />
+                  </ResumeCard>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
         </Box>
       </Page>
     </>
